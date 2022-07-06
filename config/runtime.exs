@@ -21,18 +21,29 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
+  database_name =
+    System.get_env("DATABASE_NAME") ||
       raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
+      environment variable DATABASE_NAME is missing.
+      """
+  database_username =
+    System.get_env("DATABASE_USERNAME") ||
+      raise """
+      environment variable DATABASE_USERNAME is missing.
+      """
+  database_password =
+    System.get_env("DATABASE_PASSWORD") ||
+      raise """
+      environment variable DATABASE_PASSWORD is missing.
       """
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
 
   config :phoenix_starter, PhoenixStarter.Repo,
     # ssl: true,
-    url: database_url,
+    database: database_name,
+    username: database_username,
+    password: database_password,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     socket_options: maybe_ipv6
 
