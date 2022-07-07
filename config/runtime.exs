@@ -20,32 +20,19 @@ if System.get_env("PHX_SERVER") do
   config :phoenix_starter, PhoenixStarterWeb.Endpoint, server: true
 end
 
-secrets_path =
-  System.get_env("SECRETS_PATH") ||
-    raise """
-    environment variable SECRETS_PATH is missing.
-    """
-
 if config_env() == :prod do
-  secrets = secrets_path
-  |> File.read!
-  |> String.split("\n", trim: true)
-  |> Enum.map(&String.split(&1, "=", trim: true))
-  |> Enum.map(&List.to_tuple/1)
-  |> Enum.into(%{})
-
   database_name =
-    secrets["DATABASE_NAME"] ||
+    System.get_env("DATABASE_NAME") ||
       raise """
       environment variable DATABASE_NAME is missing.
       """
   database_username =
-    secrets["DATABASE_USERNAME"] ||
+    System.get_env("DATABASE_USERNAME") ||
       raise """
       environment variable DATABASE_USERNAME is missing.
       """
   database_password =
-    secrets["DATABASE_PASSWORD"] ||
+    System.get_env("DATABASE_PASSWORD") ||
       raise """
       environment variable DATABASE_PASSWORD is missing.
       """
@@ -66,7 +53,7 @@ if config_env() == :prod do
   # to check this value into version control, so we use an environment
   # variable instead.
   secret_key_base =
-    secrets["SECRET_KEY_BASE"] ||
+    System.get_env("SECRET_KEY_BASE") ||
       raise """
       environment variable SECRET_KEY_BASE is missing.
       You can generate one by calling: mix phx.gen.secret
