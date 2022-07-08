@@ -11,8 +11,18 @@ import Config
 # before starting your production server.
 config :phoenix_starter, PhoenixStarterWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
 
-# Do not print debug messages in production
-config :logger, level: :info
+config :logger,
+  backends: [{LoggerFileBackend, :info_log}, {LoggerFileBackend, :error_log}]
+
+config :logger, :info_log,
+  path: "/var/log/phoenix_starter/info.log",
+  level: :info,
+  format: "[$date] [$time] [$level] $message\n"
+
+config :logger, :error_log,
+  path: "/var/log/phoenix_starter/error.log",
+  level: :error,
+  format: "[$date] [$time] [$level] $message\n"
 
 # ## SSL Support
 #
