@@ -23,6 +23,7 @@ end
 
 if config_env() == :prod do
   Logger.info("RUNTIME")
+  IO.inspect("RUNTIME")
 
   database_name =
     System.get_env("DATABASE_NAME") ||
@@ -43,6 +44,7 @@ if config_env() == :prod do
   maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
 
   Logger.info("repo config: #{inspect(Application.get_env(:phoenix_starter, PhoenixStarter.Repo))}")
+  IO.inspect("repo config: #{inspect(Application.get_env(:phoenix_starter, PhoenixStarter.Repo))}")
 
   config :phoenix_starter, PhoenixStarter.Repo,
     # ssl: true,
